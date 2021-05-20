@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/templatemo_style.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- 
         Composite Template 
         http://www.templatemo.com/preview/templatemo_444_composite
@@ -36,33 +37,45 @@
     <nav class="navbar-default" role="navigation">
     <div class="container">
       <div class="navbar-header navbar-left">
-        <a class="navbar-brand" href="/"><img class="img-fluid"src="images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
+        <a class="navbar-brand" href="/profileindex"><img class="img-fluid"src="images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
         <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="icon icon-bar"></span>
           <span class="icon icon-bar"></span>
           <span class="icon icon-bar"></span>
         </button>
-
-        <!-- <a href="file:///C:/Users/Sree%20Vignesh/OneDrive/Desktop/minor_project/mainproject/main_template/index.html" class="navbar-brand" ><img class="img-fluid" src="C:\Users\Sree Vignesh\OneDrive\Desktop\minor_project\mainproject\images\logo1.png"style="height: 50px; width: 300px;"></a> -->
       </div>
       <div class="collapse navbar-collapse">
         
         <ul class="nav navbar-nav ">
-          <li><a href="/" class="menu " style="background-color: orange">NEWS</a></li>
-          <li><a href="magazine.ejs" class="active menu">Magazines</a></li>
+          <li><a href="/profileindex" class="menu " style="background-color: orange">NEWS</a></li>
+          <li><a href="/pmagazine" class="active menu">Magazines</a></li>
           <!-- <li><a href="#videos" class="menu">Videos</a></li> -->
           <!-- <li><a href="#team" class="menu">OUR TEAM</a></li> -->
           <!-- <li><a href="#portfolio" class="menu">PORTFOLIOS</a></li> -->
           <li><a href="#contact" class="menu">Contact</a></li>
-          <li class="dropdown" style="position: relative; left: 100px;">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Change password</a></li>
-              <li><a href="/logout">signout</a></li>
+            <!-- <li class="dropdown" style="position: relative; left: 100px;">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Change password</a></li>
+                  <li><a href="/logout">signout</a></li>
+                </ul>
+              </li> -->
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li style="vertical-align:auto;"><a><p>Welcome, <%=user.firstname%> <%=user.lastname%></p></a></li>
+            <li><a href="/logout">logout</a></li>
+          </ul>
+        </li>
             </ul>
-          </li>
-        </ul>
+              <form class="navbar-form" action="/psearch" method="GET" style="padding-top: 7px;">
+                  <input type="text" name="searchelement" id="searchelement" class="form-control" placeholder="Search">
+                  <button class="btn" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+              </form>
       </div>
     </div>
   </nav>
@@ -70,37 +83,105 @@
 <nav class="navbar-default" role="navigation">
   <div class="container">
   <ul class="nav navbar-nav ">
-    <li><a href="/" class="menu "style="background-color: orange" >Home</a></li>
-    <li><a href="/entertainment.ejs" class=" menu">Entertainment</a></li>
-    <li><a href="/politics.ejs" class="menu">Politics</a></li>
-    <li><a href="/sports.ejs" class="menu">Sports</a></li>
-    <li><a href="/buisness.ejs" class="menu">Buisness</a></li>
-    <li><a href="/health.ejs" class="menu">Health</a></li> 
-    <li><a href="/technology.ejs" class="menu">Technology</a></li> 
+    <li><a href="/profileindex" class="menu "style="background-color : orange" >Home</a></li>
+    <li><a href="/pentertainment" class=" menu">Entertainment</a></li>
+    <li><a href="/ppolitics" class="menu">Politics</a></li>
+    <li><a href="/psports" class="menu">Sports</a></li>
+    <li><a href="/pbuisness" class="menu">Buisness</a></li>
+    <li><a href="/phealth" class="menu">Health</a></li> 
+    <li><a href="/ptechnology" class="menu">Technology</a></li> 
   </ul>
   </div>
   </nav>
-<% for(var i=newsList.length-1; i >=0 ; i--) { %>
+  <% for(var i=newsList.length-1; i >=newsList.length-30 && i>=0 ; i--) { %>
     <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
-        <div class="row">
+      <div class="container">  
+      <div class="row">
           
           <div class="col-md-8">
-            <div class="card-body" style="padding-left: 20px; ">
+            <div class="card-body"  >
               <h3 class="card-title"><b><%=newsList[i].newtitle%></b></h3>
-              <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px;"><%=newsList[i].description%></p>
+              <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px; text-align: justify;"><%=newsList[i].description%></p>
             </div>
           </div>
           <div class="col-md-4">
             <!-- <div><embed src="<%=newsList[i].image%>" width="800px" height="2100px" /></div> -->
               <!-- <iframe src="<%=newsList[i].image%>" style="width:600px; height:500px;" frameborder="0"></iframe> -->
-            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 300px; max-height: 500px;">
+            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 270px; max-height: 450px;">
             <!-- <%=newsList[i].image%> -->
             <!-- <div id="img"><%=newsList[i].image%></div> -->
             <!-- <%=newsList[i].image%> -->
           </div>
+          
         </div>
       </div>
+      
+        <div class="row">
+            <% if(newsList[i].likes.includes(user.id)){%>
+              
+              <!-- <form action="/unlike/<%=newsList[i].id%>" method="POST"> -->
+              
+            <button id="<%=newsList[i].id%>" class="fa fa-heart" type="submit" onclick="unlikepost(this.id)" style="color: red; margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Liked</button>
+            <!-- <br><p style="margin-left: 50px; margin-bottom: 10px; font-size: medium;"><%=newsList[i].likes.length%> likes</p> -->
+          <!-- </form> -->
+            <%} else{%>
+              <!-- <form action="/like/<%=newsList[i].id%>" method="POST"> -->
+            <button id="<%=newsList[i].id%>" class="fa fa-heart" type="submit" onclick="likepost(this.id)" style="margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Like</button>
+            <!-- <br><p style="margin-left: 50px; margin-bottom: 10px; font-size: medium;"><%=newsList[i].likes.length%> likes</p> -->
+          <!-- </form>   -->
+            <%}%>
+          </div>
+      </div>
 <%}%>
+<script>
+  const likepost=(id)=>{
+                fetch('/like',{
+                  method:"put",
+                  headers:{
+                    "Content-Type":"application/json"
+                  },
+                  body:JSON.stringify({
+                    postid:id
+                  })
+                }).then(res=>res.json())
+                .then(result=>{
+                    // console.log(result)
+                    var cr=document.getElementById(id);
+                    cr.setAttribute("onclick", "javascript: unlikepost(id)")
+                    cr.setAttribute("style","color: red; margin-left: 50px; margin-bottom: 10px; font-size: 16px;")
+                    cr.innerHTML="Liked"
+                    // cr.disabled=true
+                  })
+              }
+  const unlikepost=(id)=>{
+                fetch('/unlike',{
+                  method:"put",
+                  headers:{
+                    "Content-Type":"application/json"
+                  },
+                  body:JSON.stringify({
+                    postid:id
+                  })
+                }).then(res=>res.json())
+                .then(result=>{
+                    // console.log(result)
+                    var cr=document.getElementById(id);
+                    cr.setAttribute("onclick", "javascript: likepost(id)")
+                    cr.setAttribute("style", "margin-left: 50px; margin-bottom: 10px; font-size: 16px;")
+                    cr.innerHTML="Like"
+                })
+              }
+</script>
+<!-- <script>
+  fetch("https://newsapi.in/newsapi/get_news_user.php?key=sN29tvbJZE03qlDH3ejQuD0dWWhk6q&category=telugu_top")
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+
+    });
+</script> -->
 </body>
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>

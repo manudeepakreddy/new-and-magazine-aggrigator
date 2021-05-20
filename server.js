@@ -13,7 +13,7 @@ const LocalStrategy =  require("passport-local")
 const session =  require("express-session")
 
 
-const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
+// const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
 mongoose.connect('mongodb://localhost:27017/newsdb', {
 	useNewUrlParser: true,
@@ -30,11 +30,11 @@ app.set('view engine','ejs')
 app.get('/', (req, res) => {
 	News.find({}, function(err, news){
 		res.render('index', {
-			newsList:news,user
+			newsList:news
 		})
 	})
 })
-
+app.set('views',__dirname+'/views')
 app.use(express.static(__dirname + '/static'));
 app.use(bodyParser.json({
 	limit: '50mb'
@@ -69,49 +69,49 @@ app.use(bodyParser.json({
 	})
 })
 
-app.get('/magazine.ejs', async(req , res)=> {
+app.get('/magazine', async(req , res)=> {
 	Mags.find({}, function(err, mags){
 		res.render('magazine',{
 			magsList:mags
 		})
 	})
 })
-app.get('/sports.ejs', async(req , res)=> {
+app.get('/sports', async(req , res)=> {
 	News.find({type_of_news: "Sports"}, function(err, news){
 		res.render('sports',{
 			newsList:news
 		})
 	})
 })
-app.get('/politics.ejs', async(req , res)=> {
+app.get('/politics', async(req , res)=> {
 	News.find({type_of_news: "Politics"}, function(err, news){
 		res.render('politics',{
 			newsList:news
 		})
 	})
 })
-app.get('/entertainment.ejs', async(req , res)=> {
+app.get('/entertainment',async(req , res)=> {
 	News.find({type_of_news: "Entertainment"}, function(err, news){
 		res.render('entertainment',{
 			newsList:news
 		})
 	})
 })
-app.get('/buisness.ejs', async(req , res)=> {
+app.get('/buisness', async(req , res)=> {
 	News.find({type_of_news: "Buisness"}, function(err, news){
 		res.render('buisness',{
 			newsList:news
 		})
 	})
 })
-app.get('/health.ejs', async(req , res)=> {
+app.get('/health', async(req , res)=> {
 	News.find({type_of_news: "Health"}, function(err, news){
 		res.render('health',{
 			newsList:news
 		})
 	})
 })
-app.get('/technology.ejs', (req , res)=> {
+app.get('/technology', (req , res)=> {
 	News.find({type_of_news: "Technology"}, function(err, news){
 		res.render('technology',{
 			newsList:news
@@ -129,24 +129,136 @@ passport.deserializeUser(User.deserializeUser());   //session decoding
 passport.use(new LocalStrategy(User.authenticate()));
 app.use(passport.initialize());
 app.use(passport.session());
-app.get("/profileindex",(req,res) =>{
+app.get("/psearch", isLoggedIn,async(req, res) => {
+	var Searchelement=req.query.searchelement.split(" ");
+	regex = ""
+	for(var i=0;i<Searchelement.length;i++){
+		regex+="(?=.*"+Searchelement[i]+")"
+	}
+	News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, news){
+		if(news.length<3){
+			regex=""
+			regex=Searchelement.join("|");
+			News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, exnews){
+				res.render('profileindex',{
+					newsList:exnews
+				})
+			})
+		}
+		else{
+			res.render('profileindex', {
+				newsList:news
+			})
+		}
+	})
+})
+app.get("/profileindex",isLoggedIn,(req,res) =>{
+	user=req.user
 	News.find({}, function(err, news){
 		res.render("profileindex",{
-			newsList:news
+			newsList:news,
+			user
 		})
 	})
 })
+app.get('/pbuisness',isLoggedIn, async(req , res)=> {
+	user=req.user;
+	News.find({type_of_news: "Buisness"}, function(err, news){
+		res.render('pbuisness',{
+			newsList:news,
+			user
+		})
+	})
+})
+app.get('/ppolitics',isLoggedIn, async(req , res)=> {
+	user=req.user;
+	News.find({type_of_news: "Politics"}, function(err, news){
+		res.render('ppolitics',{
+			newsList:news,
+			user
+		})
+	})
+})
+app.get('/phealth', async(req , res)=> {
+	user=req.user;
+	News.find({type_of_news: "Health"}, function(err, news){
+		res.render('phealth',{
+			newsList:news,
+			user
+		})
+	})
+})
+app.get('/ptechnology', (req , res)=> {
+	user=req.user;
+	News.find({type_of_news: "Technology"}, function(err, news){
+		res.render('ptechnology',{
+			newsList:news,
+			user
+		})
+	})
+})
+app.get('/pmagazine', async(req , res)=> {
+	user=req.user
+	Mags.find({}, function(err, mags){
+		res.render('pmagazine',{
+			magsList:mags,
+			user
+		})
+	})
+})
+app.get('/psports', async(req , res)=> {
+	user=req.user
+	News.find({type_of_news: "Sports"}, function(err, news){
+		res.render('psports',{
+			newsList:news,
+			user
+		})
+	})
+})
+app.get('/pentertainment',async(req , res)=> {
+	user=req.user;
+	News.find({type_of_news: "Entertainment"}, function(err, news){
+		res.render('pentertainment',{
+			newsList:news,
+			user
+		})
+	})
+})
+app.put("/like", isLoggedIn,async(req,res)=>{
+	const cid= req.body.postid;
+	News.findByIdAndUpdate(cid,{
+		$push:{likes:req.user.id}
+	},{
+		new:true
+	}).exec((err,result)=>{
+		// console.log(result)
+		res.json(result);
+	})
+	})
+app.put("/unlike", isLoggedIn,async(req,res)=>{
+		const cid= req.body.postid;
+		News.findByIdAndUpdate(cid,{
+			$pull:{likes:req.user.id}
+		},{
+			new:true
+		}).exec((err,result)=>{
+			// console.log(result)
+			res.json(result);
+		})
+		})
 //Auth Routes
 app.get("/login",(req,res)=>{
     res.render("login");
 });
 app.post("/login",passport.authenticate("local",{
-    successRedirect:"/",
     failureRedirect:"/login"
 	}),function (req, res){
-	if(req){
-		console.log(req)
-	}
+		var redirectTo='/profileindex'
+	if(req.session.reqUrl){
+		redirectTo = req.session.reqUrl;
+		req.session.reqUrl = null;
+	};
+	res.redirect(redirectTo);
 });
 app.get("/register",(req,res)=>{
     res.render("register");
@@ -169,10 +281,14 @@ app.get("/logout",(req,res)=>{
 });
 function isLoggedIn(req,res,next) {
     if(req.isAuthenticated()){
-        next();
+        return next();
     }
-    res.redirect("/login");
+	req.session.reqUrl=req.originalUrl;
+	// console.log(req.session.reqUrl)
+	res.redirect("/login");
+    
 }
+
 // app.post('/api/change-password', async (req, res) => {
 // 	const { token, newpassword: plainTextPassword } = req.body
 

@@ -48,7 +48,7 @@
         
         <ul class="nav navbar-nav ">
           <li><a href="/" class="menu " style="background-color: orange">NEWS</a></li>
-          <li><a href="magazine.ejs" class="active menu">Magazines</a></li>
+          <li><a href="/magazine" class="active menu">Magazines</a></li>
           <!-- <li><a href="#videos" class="menu">Videos</a></li> -->
           <!-- <li><a href="#team" class="menu">OUR TEAM</a></li> -->
           <!-- <li><a href="#portfolio" class="menu">PORTFOLIOS</a></li> -->
@@ -78,21 +78,22 @@
   <div class="container">
   <ul class="nav navbar-nav ">
     <li><a href="/" class="menu "style="background-color : orange" >Home</a></li>
-    <li><a href="/entertainment.ejs" class=" menu">Entertainment</a></li>
-    <li><a href="/politics.ejs" class="menu">Politics</a></li>
-    <li><a href="/sports.ejs" class="menu">Sports</a></li>
-    <li><a href="/buisness.ejs" class="menu">Buisness</a></li>
-    <li><a href="/health.ejs" class="menu">Health</a></li> 
-    <li><a href="/technology.ejs" class="menu">Technology</a></li> 
+    <li><a href="/entertainment" class=" menu">Entertainment</a></li>
+    <li><a href="/politics" class="menu">Politics</a></li>
+    <li><a href="/sports" class="menu">Sports</a></li>
+    <li><a href="/buisness" class="menu">Buisness</a></li>
+    <li><a href="/health" class="menu">Health</a></li> 
+    <li><a href="/technology" class="menu">Technology</a></li> 
   </ul>
   </div>
   </nav>
 <% for(var i=newsList.length-1; i >=newsList.length-30 && i>=0 ; i--) { %>
     <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
-        <div class="row">
+      <div class="container">  
+      <div class="row">
           
           <div class="col-md-8">
-            <div class="card-body" style="padding-left: 20px; padding-right: 20px;">
+            <div class="card-body"  >
               <h3 class="card-title"><b><%=newsList[i].newtitle%></b></h3>
               <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px; text-align: justify;"><%=newsList[i].description%></p>
             </div>
@@ -100,15 +101,26 @@
           <div class="col-md-4">
             <!-- <div><embed src="<%=newsList[i].image%>" width="800px" height="2100px" /></div> -->
               <!-- <iframe src="<%=newsList[i].image%>" style="width:600px; height:500px;" frameborder="0"></iframe> -->
-            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 300px; max-height: 500px;">
+            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 270px; max-height: 450px;">
             <!-- <%=newsList[i].image%> -->
             <!-- <div id="img"><%=newsList[i].image%></div> -->
             <!-- <%=newsList[i].image%> -->
           </div>
-          <!-- <button style="margin-left: 20px; margin-bottom: 10px;">like</button> -->
+          
+        </div>
+      </div>
+        <div class="row">
+          <td><button id="<%=newsList[i].id%>"class="fa fa-heart" onclick="myfun(this.id)" type="submit" style="margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Like</button>
+          <p style="margin-left: 50px; margin-bottom: 10px; font-size: medium;"><%=newsList[i].likes.length%> likes</p>
         </div>
       </div>
 <%}%>
+<script>
+  function myfun(x){
+    alert("login to like")
+    window.open("/profileindex")
+  }
+</script>
 <!-- <script>
   fetch("https://newsapi.in/newsapi/get_news_user.php?key=sN29tvbJZE03qlDH3ejQuD0dWWhk6q&category=telugu_top")
     .then(function (response) {

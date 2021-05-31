@@ -1,0 +1,83 @@
+<script>
+    function submitform(id){
+      document.getElementById(id).submit()
+    }
+  </script>
+  <% for(var i=newsList.length-1; i >=newsList.length-30 && i>=0 ; i--) { %>
+    <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
+      <div class="container">  
+        <form action="particle/<%=newsList[i].id%>" method="get" id="particle/<%=newsList[i].id%>" onclick="submitform(this.id)">
+      <div class="row">
+          
+          <div class="col-md-8">
+            <div class="card-body"  >
+              <h3 class="card-title"><b><%=newsList[i].newtitle%></b></h3>
+              <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px; text-align: justify; height: 80px; line-height: 20px; overflow: hidden;"><%=newsList[i].description%></p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            
+            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 270px; max-height: 450px;">
+            
+          </div>
+          
+        </div>
+        </form>
+      </div>
+      
+        <div class="row">
+            <% if(newsList[i].likes.includes(user.id)){%>
+              
+              <!-- <form action="/unlike/<%=newsList[i].id%>" method="POST"> -->
+              
+            <button id="<%=newsList[i].id%>" class="fa fa-heart" type="submit" onclick="unlikepost(this.id)" style="color: red; margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Liked</button>
+            <!-- <br><p style="margin-left: 50px; margin-bottom: 10px; font-size: medium;"><%=newsList[i].likes.length%> likes</p> -->
+          <!-- </form> -->
+            <%} else{%>
+              <!-- <form action="/like/<%=newsList[i].id%>" method="POST"> -->
+            <button id="<%=newsList[i].id%>" class="fa fa-heart" type="submit" onclick="likepost(this.id)" style="margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Like</button>
+            <!-- <br><p style="margin-left: 50px; margin-bottom: 10px; font-size: medium;"><%=newsList[i].likes.length%> likes</p> -->
+          <!-- </form>   -->
+            <%}%>
+          </div>
+      </div>
+<%}%>
+<script>
+  const likepost=(id)=>{
+                fetch('/like',{
+                  method:"put",
+                  headers:{
+                    "Content-Type":"application/json"
+                  },
+                  body:JSON.stringify({
+                    postid:id
+                  })
+                }).then(res=>res.json())
+                .then(result=>{
+                    // console.log(result)
+                    var cr=document.getElementById(id);
+                    cr.setAttribute("onclick", "javascript: unlikepost(id)")
+                    cr.setAttribute("style","color: red; margin-left: 50px; margin-bottom: 10px; font-size: 16px;")
+                    cr.innerHTML="Liked"
+                    // cr.disabled=true
+                  })
+              }
+  const unlikepost=(id)=>{
+                fetch('/unlike',{
+                  method:"put",
+                  headers:{
+                    "Content-Type":"application/json"
+                  },
+                  body:JSON.stringify({
+                    postid:id
+                  })
+                }).then(res=>res.json())
+                .then(result=>{
+                    // console.log(result)
+                    var cr=document.getElementById(id);
+                    cr.setAttribute("onclick", "javascript: likepost(id)")
+                    cr.setAttribute("style", "margin-left: 50px; margin-bottom: 10px; font-size: 16px;")
+                    cr.innerHTML="Like"
+                })
+              }
+</script>

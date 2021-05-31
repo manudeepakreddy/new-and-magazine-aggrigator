@@ -7,13 +7,16 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/signup.css">
 		<script type="text/javascript" src="js/signup.js"></script>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Login</title>
 	</head>
+	
 	<body>
+		
 		<!-- <h1>Login</h1> -->
 		
 				<header class="header">
@@ -21,7 +24,7 @@
 						<div class="container">
 							<!-- Navbar Brand -->
 							<!-- <a href="file:///C:/Users/Sree%20Vignesh/OneDrive/Desktop/minor_project/mainproject/main_template/index.html" class="navbar-brand"> -->
-								<img class="img-fluid"src="images\logo1.png" alt="logo">
+								<a href="/"> <img class="img-fluid"src="images\logo1.png" alt="logo">
 							</a>
 						</div>
 					</nav>
@@ -44,11 +47,13 @@
 
 									<div class="form-group col-lg-12 mx-auto mb-0">
 										<h2 class="text-muted font-weight-bold ">Login</h2><br>
+											
+										
 									</div>
 									<div class="input-group col-lg-8 mb-4">
 										<div class="input-group-prepend">
 											<span class="input-group-text bg-white px-4 border-md border-right-0">
-												<i class="fa fa-envelope text-muted"></i>
+												<i class="fa fa-user text-muted"></i>
 											</span>
 										</div>
 										<input id="username" type="text" name="username" placeholder="Username" class="form-control bg-white border-left-0 border-md">
@@ -62,8 +67,16 @@
 										</div>
 										<input id="password" type="password" name="password" placeholder="Password" class="form-control bg-white border-left-0 border-md" style="width: 100px">
 									</div>
-				
+									
+										<% if (message!=''){%>
+											<div class="input-group col-lg-8 mb-4">
+											<i class="fa fa-warning" style="color: red;">   <%=message%></i>
+										</div>
+										<%}%>
+									
 									<div class="form-group col-lg-8 mb-2">
+										
+										
 										<input type="Submit" value="Login" class="btn btn-primary btn-block py-2">
 										
 									</div>

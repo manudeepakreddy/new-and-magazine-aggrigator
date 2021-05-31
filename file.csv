@@ -1,0 +1,6 @@
+Total,Name
+"data","fields","header"
+"[{""Total"":""100"",""Name"":""myName1""},{""Total"":""200"",""Name"":""myName2""}]","[""Total"",""Name""]",false
+"[{""Total"":""100"",""Name"":""myName1""},{""Total"":""200"",""Name"":""myName2""}]","[""Total"",""Name""]",false
+"100","myName1"
+"200","myName2"

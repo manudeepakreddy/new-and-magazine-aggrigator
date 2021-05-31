@@ -11,8 +11,9 @@ const jwt = require('jsonwebtoken')
 const passport = require("passport")
 const LocalStrategy =  require("passport-local")
 const session =  require("express-session")
-
-
+var flash = require('connect-flash');
+var fs = require('fs');
+var json2csv = require('json2csv').parse;
 // const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
 mongoose.connect('mongodb://localhost:27017/newsdb', {
@@ -26,6 +27,7 @@ mongoose.connect('mongodb://localhost:27017/newsdb', {
 const app = express()
 var ejs=require('ejs')
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants')
+const { ObjectID } = require('bson')
 app.set('view engine','ejs')
 app.get('/', (req, res) => {
 	News.find({}, function(err, news){
@@ -45,6 +47,7 @@ app.use(bodyParser.json({
 	parameterLimit: 100000,
 	extended: true 
   }));
+  
   app.get("/search", async(req, res) => {
 	var Searchelement=req.query.searchelement.split(" ");
 	regex = ""
@@ -52,7 +55,7 @@ app.use(bodyParser.json({
 		regex+="(?=.*"+Searchelement[i]+")"
 	}
 	News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, news){
-		if(news.length<3){
+		if(news.length<1){
 			regex=""
 			regex=Searchelement.join("|");
 			News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, exnews){
@@ -119,11 +122,123 @@ app.get('/technology', (req , res)=> {
 	})
 })
 
+app.get('/article/:id',async(req,res)=>{
+	const currentid = req.params.id;
+	// console.log(req.params)
+
+
+
+// const json2csv = require('json2csv').parse;
+
+// let csv; 
+
+// const data = await News.find({});
+// const fields = ['_id','description'];
+//  try {
+//         csv = json2csv(data, {fields});
+		
+//     } catch (err) {
+//         return res.status(500).json({err});
+//     }
+
+// 	var fs = require('fs');
+
+// fs.writeFile('C:/Users/Sree Vignesh/OneDrive/Desktop/newsandmagazines/ml/data.csv', csv, 'utf8', function (err) {
+//   if (err) {
+//     console.log('Some error occured - file either not saved or corrupted file saved.');
+//   } else{
+//     console.log('It\'s saved!');
+//   }
+// });
+
+	News.find({_id: currentid}, function(err, news){
+		if(err){
+			console.log(err)
+		}
+		else{
+
+			const axios = require('axios')
+
+			axios
+			.post('http://192.168.43.233:5000//similarity', {description: news[0].description})
+			.then(mlresult => {
+				// console.log(`statusCode: ${res.statusCode}`)
+				var indices = mlresult.data["indices"]
+				var obj_indices = indices.map(function(id){
+					return ObjectID(id);
+				});
+				News.find({_id:{$in:obj_indices}},function(err,resultnews){
+					if(err){
+						console.log(err);
+					}else{
+						res.render('openpage',{
+							newsList:resultnews,
+							news
+						})
+					}
+				})
+			})
+			.catch(error => {
+				console.error(error)
+			})
+			// ctype=news[0].type_of_news;
+			// News.find({$and:[{_id:{$ne:currentid}},{type_of_news:ctype}]},function(err, resultnews){
+			// 	if(err){
+			// 		console.log(err)
+			// 	}else{
+			// 		res.render('openpage',{
+			// 			newsList:resultnews,
+			// 			news
+			// 		})
+			// 	}
+			// })
+		}
+	})
+	
+})
+app.get('/magazineview/:id',(req,res) => {
+	const currentid = req.params.id;
+	Mags.find({_id: currentid},function(err, mags){
+		if(err){
+			console.log(err)
+		}else{
+			const axios = require('axios')
+
+			axios
+			.post('http://192.168.43.233:5000//magsimilarity', {description: mags[0].description})
+			.then(mlresult => {
+				// console.log(`statusCode: ${res.statusCode}`)
+				var indices = mlresult.data["indices"]
+				var obj_indices = indices.map(function(id){
+					return ObjectID(id);
+				});
+				Mags.find({_id:{$in:obj_indices}},function(err,resultmags){
+					if(err){
+						console.log(err);
+					}else{
+						// console.log(resultmags)
+						res.render('magazineview',{
+							magsList:mags,
+							rec_mags:resultmags
+						})
+					}
+				})
+			})
+			.catch(error => {
+				console.error(error)
+			})
+		}
+		// res.render('magazineview',{
+		// 	magsList:mags
+		// })
+	})
+})
 app.use(require("express-session")({
     secret:"askfj;dlkjsldkjfa;kjdsf;lkjsd;flkjsdlkfj;lkjsdf;ljlkjsdf",       //decode or encode session
     resave: false,          
     saveUninitialized:false    
 }));
+app.use(flash());
 passport.serializeUser(User.serializeUser());       //session encoding
 passport.deserializeUser(User.deserializeUser());   //session decoding
 passport.use(new LocalStrategy(User.authenticate()));
@@ -136,7 +251,7 @@ app.get("/psearch", isLoggedIn,async(req, res) => {
 		regex+="(?=.*"+Searchelement[i]+")"
 	}
 	News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, news){
-		if(news.length<3){
+		if(news.length<1){
 			regex=""
 			regex=Searchelement.join("|");
 			News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, exnews){
@@ -179,7 +294,7 @@ app.get('/ppolitics',isLoggedIn, async(req , res)=> {
 		})
 	})
 })
-app.get('/phealth', async(req , res)=> {
+app.get('/phealth',isLoggedIn, async(req , res)=> {
 	user=req.user;
 	News.find({type_of_news: "Health"}, function(err, news){
 		res.render('phealth',{
@@ -188,7 +303,7 @@ app.get('/phealth', async(req , res)=> {
 		})
 	})
 })
-app.get('/ptechnology', (req , res)=> {
+app.get('/ptechnology',isLoggedIn, (req , res)=> {
 	user=req.user;
 	News.find({type_of_news: "Technology"}, function(err, news){
 		res.render('ptechnology',{
@@ -197,7 +312,7 @@ app.get('/ptechnology', (req , res)=> {
 		})
 	})
 })
-app.get('/pmagazine', async(req , res)=> {
+app.get('/pmagazine',isLoggedIn, async(req , res)=> {
 	user=req.user
 	Mags.find({}, function(err, mags){
 		res.render('pmagazine',{
@@ -206,7 +321,7 @@ app.get('/pmagazine', async(req , res)=> {
 		})
 	})
 })
-app.get('/psports', async(req , res)=> {
+app.get('/psports',isLoggedIn, async(req , res)=> {
 	user=req.user
 	News.find({type_of_news: "Sports"}, function(err, news){
 		res.render('psports',{
@@ -215,7 +330,7 @@ app.get('/psports', async(req , res)=> {
 		})
 	})
 })
-app.get('/pentertainment',async(req , res)=> {
+app.get('/pentertainment',isLoggedIn, async(req , res)=> {
 	user=req.user;
 	News.find({type_of_news: "Entertainment"}, function(err, news){
 		res.render('pentertainment',{
@@ -246,14 +361,118 @@ app.put("/unlike", isLoggedIn,async(req,res)=>{
 			res.json(result);
 		})
 		})
+app.get('/particle/:id',isLoggedIn,(req,res)=>{
+	user=req.user
+	const currentid = req.params.id;
+	// console.log(req.params)
+	News.find({_id: currentid}, function(err, news){
+		if(err){
+			console.log(err)
+		}
+		else{
+			const axios = require('axios')
+
+			axios
+			.post('http://127.0.0.1:5000//similarity', {description: news[0].description})
+			.then(mlresult => {
+				// console.log(`statusCode: ${res.statusCode}`)
+				var indices = mlresult.data["indices"]
+				var obj_indices = indices.map(function(id){
+					return ObjectID(id);
+				});
+				News.find({_id:{$in:obj_indices}},function(err,resultnews){
+					if(err){
+						console.log(err);
+					}else{
+						res.render('popenpage',{
+							newsList:resultnews,
+							news,
+							user
+						})
+					}
+				})
+			})
+			.catch(error => {
+				console.error(error)
+			})
+
+
+
+			// ctype=news[0].type_of_news;
+			// News.find({$and:[{_id:{$ne:currentid}},{type_of_news:ctype}]},function(err, resultnews){
+			// 	if(err){
+			// 		console.log(err)
+			// 	}else{
+			// 		res.render('popenpage',{
+			// 			newsList:resultnews,
+			// 			news,
+			// 			user
+			// 		})
+			// 	}
+			// })
+		}
+	})
+	
+})
+app.get('/pmagazineview/:id',isLoggedIn,(req,res) => {
+	const currentid = req.params.id;
+	user=req.user
+	Mags.find({_id: currentid},function(err, mags){
+		if(err){
+			console.log(err)
+		}
+		else{
+			const axios = require('axios')
+
+			axios
+			.post('http://127.0.0.1:5000//magsimilarity', {description: mags[0].description})
+			.then(mlresult => {
+				// console.log(`statusCode: ${res.statusCode}`)
+				var indices = mlresult.data["indices"]
+				var obj_indices = indices.map(function(id){
+					return ObjectID(id);
+				});
+				Mags.find({_id:{$in:obj_indices}},function(err,resultmags){
+					if(err){
+						console.log(err);
+					}else{
+						res.render('pmagazineview',{
+							magsList:mags,
+							rec_mags:resultmags
+						})
+					}
+				})
+			})
+			.catch(error => {
+				console.error(error)
+			})
+
+
+
+			// ctype=news[0].type_of_news;
+			// News.find({$and:[{_id:{$ne:currentid}},{type_of_news:ctype}]},function(err, resultnews){
+			// 	if(err){
+			// 		console.log(err)
+			// 	}else{
+			// 		res.render('popenpage',{
+			// 			newsList:resultnews,
+			// 			news,
+			// 			user
+			// 		})
+			// 	}
+			// })
+		}
+
+	})
+})
 //Auth Routes
 app.get("/login",(req,res)=>{
-    res.render("login");
+	var message=req.flash('error')
+	// console.log(message)
+    res.render("login",{message});
 });
-app.post("/login",passport.authenticate("local",{
-    failureRedirect:"/login"
-	}),function (req, res){
-		var redirectTo='/profileindex'
+app.post("/login",passport.authenticate("local",{failureRedirect:"/login",failureFlash : true}),function (req, res){
+	var redirectTo='/profileindex'
 	if(req.session.reqUrl){
 		redirectTo = req.session.reqUrl;
 		req.session.reqUrl = null;
@@ -261,14 +480,16 @@ app.post("/login",passport.authenticate("local",{
 	res.redirect(redirectTo);
 });
 app.get("/register",(req,res)=>{
-    res.render("register");
+	var message="";
+    res.render("register",{message});
 });
 app.post("/register",(req,res)=>{
     
     User.register(new User({username: req.body.username,firstname:req.body.firstname,lastname: req.body.lastname}),req.body.password,function(err,user){
-        if(err){
-            console.log(err);
-            res.render("register");
+		if(err){
+			console.log(err);
+            var message = "User Name Already Exists"
+            res.render("register",{message});
         }
     passport.authenticate("local")(req,res,function(){
         res.redirect("/login");
@@ -421,7 +642,46 @@ app.post('/api/insertnews', async(req,res) => {
 			type_of_news,
 			image
 		})
-		console.log('NEws inserted successfully: ', response)
+		var newLine = '\r\n';
+		
+		var fields = ['_id', 'description'];
+		
+		var appendThis = [
+		  {
+			_id : response._id,
+			description : response.description
+		  }
+		];
+		
+		fs.stat('./ml/data.csv', function (err, stat) {
+		  if (err == null) {
+			// console.log('File exists');
+		
+			//write the actual data and end with newline
+			var csv = json2csv(appendThis,{header:false}) + newLine;
+		
+			fs.appendFile('./ml/data.csv', csv, function (err) {
+			  if (err) throw err;
+			//   console.log('The "data to append" was appended to file!');
+			});
+		  } else {
+			//write the headers and newline
+			// console.log('New file, just writing headers');
+			fields = fields + newLine;
+		
+			fs.writeFile('./ml/data.csv', fields, function (err) {
+			  if (err) throw err;
+			//   console.log('file saved');
+			});
+			var csv = json2csv(appendThis,{header:false}) + newLine;
+		
+			fs.appendFile('./ml/data.csv', csv, function (err) {
+			  if (err) throw err;
+			//   console.log('The "data to append" was appended to file!');
+			});
+		  }
+		});
+		// console.log('News inserted successfully: ', response)
 	} catch (error) {
 		throw error
 	}
@@ -429,7 +689,7 @@ app.post('/api/insertnews', async(req,res) => {
 	res.json({ status: 'ok' })
 })
 app.post('/api/insertmags', async(req,res) => {
-	const{ title, image, pdf} = req.body
+	const{ title, image, description,issued, pdf} = req.body
 	
 
 	if (!title || typeof title !== 'string') {
@@ -443,13 +703,65 @@ app.post('/api/insertmags', async(req,res) => {
 	if (!pdf) {
 		return res.json({ status: 'error', error: 'Invalid document' })
 	}
+	if(!description){
+		return res.json({ status: 'error', error: 'Invalid description' })
+	}
+	if(!issued){
+		return res.json({ status: 'error', error: 'Invalid date' })
+	}
 	try {
 		const response = await Mags.create({
 			title,
 			image,
+			description,
+			issued,
 			pdf
 		})
-		console.log('Magazine inserted successfully: ', response)
+
+
+		
+		var newLine = '\r\n';
+		
+		var fields = ['_id', 'description'];
+		
+		var appendThis = [
+		  {
+			_id : response._id,
+			description : response.description
+		  }
+		];
+		
+		fs.stat('./ml/magdata.csv', function (err, stat) {
+		  if (err == null) {
+			// console.log('File exists');
+		
+			//write the actual data and end with newline
+			var csv = json2csv(appendThis,{header:false}) + newLine;
+		
+			fs.appendFile('./ml/magdata.csv', csv, function (err) {
+			  if (err) throw err;
+			//   console.log('The "data to append" was appended to file!');
+			});
+		  } else {
+			//write the headers and newline
+			// console.log('New file, just writing headers');
+			fields = fields + newLine;
+		
+			fs.writeFile('./ml/magdata.csv', fields, function (err) {
+			  if (err) throw err;
+			//   console.log('file saved');
+			});
+			var csv = json2csv(appendThis,{header:false}) + newLine;
+		
+			fs.appendFile('./ml/magdata.csv', csv, function (err) {
+			  if (err) throw err;
+			//   console.log('The "data to append" was appended to file!');
+			});
+		  }
+		});
+
+
+		// console.log('Magazine inserted successfully: ', response)
 	} catch (error) {
 		throw error
 	}

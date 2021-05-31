@@ -13,9 +13,14 @@
     <div>
         <form action="#" id="insertmags" >
             <div style="display: block; padding: 10px 0 10px 0">
-                <label for="name" > Title</label>
-                <input type="text" id="title" placeholder="Title"
-                       value="" name="name" required >
+                <label for="name" > Title</label><br>
+                <textarea rows="5" cols="80" id="title" placeholder="Title"
+                       value="" name="name" required ></textarea>
+            </div>
+            <div style="display: block; padding: 10px 0 10px 0">
+                <label for="description" > Description</label><br>
+                <textarea rows="5" cols="80" id="description" placeholder="Description"
+                       value="" name="description" required ></textarea>
             </div>
             <div style="display: block; padding: 10px 0 10px 0">
                 <!-- <label for="image">Upload Image</label>
@@ -32,6 +37,10 @@
                 <label for="pdf" > Insert pdf</label>
                 <input type="file" name="pdf" id="pdf" onchange="previewFile()"><br>
                 <img src="" height="200" alt="" style="display: none;">
+            </div>
+            <div style="display: block; padding: 10px 0 10px 0">
+                <label for="issue">Issued:</label>
+                    <input type="month" id="issued" name="issue" value="2018-05">
             </div>
             <div style="display: block; padding: 10px 0 10px 0">
                 <button type="submit" >Submit</button>
@@ -55,7 +64,7 @@
 
             var newImage = document.createElement('img');
             newImage.src = srcData;
-            console.log(newImage.src);
+            // console.log(newImage.src);
             document.getElementById("imgs").innerHTML = newImage.src;
             // alert("Converted Base64 version is " + document.getElementById("imgs").innerHTML);
             // console.log("Converted Base64 version is " + document.getElementById("imgs").innerHTML);
@@ -75,7 +84,7 @@
 
             var newImage = document.createElement('pd');
             newImage.src = srcData;
-            console.log(newImage.src);
+            // console.log(newImage.src);
             document.getElementById("pdfs").innerHTML = newImage.src;
             // alert("Converted Base64 version is " + document.getElementById("imgs").innerHTML);
             // console.log("Converted Base64 version is " + document.getElementById("imgs").innerHTML);
@@ -91,7 +100,10 @@
 				const title = document.getElementById('title').value
                 const image = document.getElementById("imgs").innerHTML
                 const pdf = document.getElementById("pdfs").innerHTML
-                // console.log(image)
+                const description = document.getElementById("description").value
+                const issued = document.getElementById("issued").value
+                console.log(issued)
+                // console.log(description)
 				const result = await fetch('/api/insertmags', {
 					method: 'POST',
 					headers: {
@@ -100,6 +112,8 @@
 					body: JSON.stringify({
 						title,
 						image,
+                        description,
+                        issued,
                         pdf
 					})
 				}).then((res) => res.json())

@@ -1,106 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
-    <title>News</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/templatemo_style.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>   
-        <!-- 
-        Composite Template 
-        http://www.templatemo.com/preview/templatemo_444_composite
-        -->
-  </head>
-<body id="top" data-spy="scroll" data-target=".navbar-collapse">
-
-<!-- <div style="text-align: center;">
-  <img src="C:\Users\Sree Vignesh\OneDrive\Desktop\minor_project\mainproject\images\logo.png">
-</div> -->
-
-<style type="text/css">
-    .sticktop{
-      position: -webkit-sticky;
-      position: sticky;
-      display: block;
-      top: 0px;
-      z-index: 100;
-
-    }
-  </style>
-  <div class="sticktop">
-    <nav class="navbar-default" role="navigation">
-    <div class="container">
-      <div class="navbar-header navbar-left">
-        <a class="navbar-brand" href="/profileindex"><img class="img-fluid"src="images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
-        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="icon icon-bar"></span>
-          <span class="icon icon-bar"></span>
-          <span class="icon icon-bar"></span>
-        </button>
-
-        <!-- <a href="file:///C:/Users/Sree%20Vignesh/OneDrive/Desktop/minor_project/mainproject/main_template/index.html" class="navbar-brand" ><img class="img-fluid" src="C:\Users\Sree Vignesh\OneDrive\Desktop\minor_project\mainproject\images\logo1.png"style="height: 50px; width: 300px;"></a> -->
-      </div>
-      <div class="collapse navbar-collapse">
-        
-        <ul class="nav navbar-nav ">
-          <li><a href="/profileindex" class="menu " style="background-color: orange">NEWS</a></li>
-          <li><a href="/pmagazine" class="active menu">Magazines</a></li>
-          <!-- <li><a href="#videos" class="menu">Videos</a></li> -->
-          <!-- <li><a href="#team" class="menu">OUR TEAM</a></li> -->
-          <!-- <li><a href="#portfolio" class="menu">PORTFOLIOS</a></li> -->
-          <li><a href="#contact" class="menu">Contact</a></li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
-              <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li style="vertical-align:auto;"><a><p>Welcome, <%=user.firstname%> <%=user.lastname%></p></a></li>
-                <li><a href="/logout">logout</a></li>
-              </ul>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</div>
+<%- include('profilenavbar.ejs') %>
 <nav class="navbar-default" role="navigation">
   <div class="container">
   <ul class="nav navbar-nav ">
     <li><a href="/profileindex" class="menu ">Home</a></li>
-    <li><a href="/pentertainment" class=" menu">Entertainment</a></li>
+    <li><a href="/pentertainment" class=" menu" >Entertainment</a></li>
     <li><a href="/ppolitics" class="menu">Politics</a></li>
-    <li><a href="/psports" class="menu">Sports</a></li>
+    <li><a href="/psports" class="menu" >Sports</a></li>
     <li><a href="/pbuisness" class="menu">Buisness</a></li>
-    <li><a href="/phealth" class="menu">Health</a></li> 
-    <li><a href="/ptechnology" class="menu"style="background-color: orange">Technology</a></li> 
+    <li><a href="/phealth" class="menu"  >Health</a></li> 
+    <li><a href="/ptechnology" class="menu" style="background-color : orange">Technology</a></li> 
   </ul>
   </div>
   </nav>
-  <% for(var i=newsList.length-1; i >=0 ; i--) { %>
-    <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
-        <div class="row">
-          
-          <div class="col-md-8">
-            <div class="card-body" style="padding-left: 20px; ">
-              <h3 class="card-title"><b><%=newsList[i].newtitle%></b></h3>
-              <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px;"><%=newsList[i].description%></p>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <!-- <div><embed src="<%=newsList[i].image%>" width="800px" height="2100px" /></div> -->
-              <!-- <iframe src="<%=newsList[i].image%>" style="width:600px; height:500px;" frameborder="0"></iframe> -->
-            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 300px; max-height: 500px;">
-            <!-- <%=newsList[i].image%> -->
-            <!-- <div id="img"><%=newsList[i].image%></div> -->
-            <!-- <%=newsList[i].image%> -->
-          </div>
-        </div>
-      </div>
-<%}%>
+  <%- include('profilenewslist.ejs') %>
 </body>
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>

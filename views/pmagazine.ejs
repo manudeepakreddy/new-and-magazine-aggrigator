@@ -73,23 +73,29 @@
     
 }
 </script> -->
-  <div class="container">
-    <div class="row">
-      <% for(var i=magsList.length-1; i >=0 ; i--) { %>
-        <div class="col-xl col-lg-3 col-md-4 col-sm-6 pb-4">
-           <div class="card card-block" style="padding-left: 10px;padding-top: 20px; " >
-              <a href="<%=magsList[i].pdf%>" download="<%=magsList[i].title%>">
-                <button type="submit"><img class="card-img-top" src="<%=magsList[i].image%>" alt="Card image cap" ></button>
-                <h2 id="title" style="text-align: center;"><%=magsList[i].title%></h2>
-              </a>
-              
-                <!-- <iframe id="showmags"src="<%=magsList[i].pdf%>" width="500" height="200" style="background:#ffffff; display:none"></iframe> -->
+<script>
+  function submitform(id){
+    document.getElementById(id).submit();
+  }
+  </script>
+  
+    <div class="container">
+      <div class="row">
+        <% for(var i=magsList.length-1; i >=0 ; i--) { %>
+          <form action="/pmagazineview/<%=magsList[i].id%>" method="GET" id="<%=magsList[i].id%>" onclick="submitform(this.id)">
+            <div class="col-xl col-lg-3 col-md-4 col-sm-6 pb-4">
+              <div class="card card-block" style="padding-left: 10px;padding-top: 20px; " >
+                  <div style="margin: auto; text-align: center;">
+                  <img class="card-img-top img-fluid"style="max-width: 100%;" src="<%=magsList[i].image%>" alt="Card image cap" height="300px">
+                </div>
+                  <h4 id="title" style="text-align: center; white-space: nowrap;"><%=magsList[i].title%></h4>
+              </div>
+                
             </div>
-            
-        </div>
-        <%}%>
+        </form>
+          <%}%>
+      </div>
     </div>
-  </div>
 
 
 </body>

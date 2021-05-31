@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>Magazines</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/templatemo_style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>   
+        <!-- 
+        Composite Template 
+        http://www.templatemo.com/preview/templatemo_444_composite
+        -->
+  </head>
+<body id="top" data-spy="scroll" data-target=".navbar-collapse">
+
+<!-- <div style="text-align: center;">
+  <img src="C:\Users\Sree Vignesh\OneDrive\Desktop\minor_project\mainproject\images\logo.png">
+</div> -->
+
+<style type="text/css">
+    .sticktop{
+      position: -webkit-sticky;
+      position: sticky;
+      display: block;
+      top: 0px;
+      z-index: 100;
+
+    }
+  </style>
+  <div class="sticktop">
+    <nav class="navbar-default" role="navigation">
+    <div class="container">
+      <div class="navbar-header navbar-left">
+        <a class="navbar-brand" href="/pmagazine"><img class="img-fluid"src="images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
+        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon icon-bar"></span>
+          <span class="icon icon-bar"></span>
+          <span class="icon icon-bar"></span>
+        </button>
+
+        <!-- <a href="file:///C:/Users/Sree%20Vignesh/OneDrive/Desktop/minor_project/mainproject/main_template/index.html" class="navbar-brand" ><img class="img-fluid" src="C:\Users\Sree Vignesh\OneDrive\Desktop\minor_project\mainproject\images\logo1.png"style="height: 50px; width: 300px;"></a> -->
+      </div>
+      <div class="collapse navbar-collapse">
+        
+        <ul class="nav navbar-nav ">
+          <li><a href="/profileindex" class="menu " >NEWS</a></li>
+          <li><a href="/pmagazine" class="active menu" style="background-color: orange">Magazines</a></li>
+          <!-- <li><a href="#videos" class="menu">Videos</a></li> -->
+          <!-- <li><a href="#team" class="menu">OUR TEAM</a></li> -->
+          <!-- <li><a href="#portfolio" class="menu">PORTFOLIOS</a></li> -->
+          <li><a href="#contact" class="menu">Contact</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+              <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li style="vertical-align:auto;"><a><p>Welcome, <%=user.firstname%> <%=user.lastname%></p></a></li>
+                <li><a href="/logout">logout</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+<!-- <script>
+  function showmag () {
+    document.getElementById("showmags").style.display="block";
+    
+}
+</script> -->
+    <div class="container">
+      <div class="row">
+          <br><br>
+        <% for(var i=magsList.length-1; i >=0 ; i--) { %>
+          <div style= "margin:20px;" style="width: 50%;height: 50%; " >                
+              <div style="margin: auto; text-align: center;"><img class="img-fluid" style="max-width: 100%; height: auto;" src="<%=magsList[i].image%>" width="300" /></div>
+          </div>
+          
+          <div style="padding-left: 20px; padding-top: 0px;">
+              <h2 style="padding-left: 5px; text-align: justify;"><b>Title:</b><%=magsList[i].title%></h2>
+              <p class="col-sm-8 news-add"style="padding-left: 5px;"><b>Description:</b><%= magsList[i].description%> </p>
+              <a href="<%=magsList[i].pdf%>" download="<%=magsList[i].title%>"><button><span class="fa fa-download"></span> Download</button></a> </p>
+          </div>
+          <%}%>
+          </div>
+      </div>
+
+      <br><hr style="margin-left: 50px;margin-right: 50px; height: 1px; background: gray;"><br>
+<script>
+  function submitform(id){
+    document.getElementById(id).submit();
+  }
+  </script>
+  
+    <div class="container">
+      <div class="row">
+        <% for(var i=0; i < rec_mags.length ; i++) { %>
+          <form action="<%=rec_mags[i].id%>" method="GET" id="<%=rec_mags[i].id%>" onclick="submitform(this.id)">
+            <div class="col-xl col-lg-3 col-md-4 col-sm-6 pb-4">
+              <div class="card card-block" style="padding-left: 10px;padding-top: 20px; " >
+                  <div style="margin: auto; text-align: center;">
+                  <img class="card-img-top img-fluid"style="max-width: 100%;" src="<%=rec_mags[i].image%>" alt="Card image cap" height="300px">
+                </div>
+                  <h4 id="title" style="text-align: center; white-space: nowrap;"><%=rec_mags[i].title%></h4>
+              </div>
+              </div>
+        </form>
+          <%}%>
+      </div>
+    </div>
+  
+</body>
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/smoothScroll.js"></script>
+  <script src="js/jquery.flexslider.js"></script>
+  <!-- <script src="ejs.min.js"></script> -->
+
+</html>

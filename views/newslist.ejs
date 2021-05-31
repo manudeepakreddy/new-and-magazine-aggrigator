@@ -1,0 +1,34 @@
+<script>
+    function submitform(id){
+      document.getElementById(id).submit()
+    }
+  </script>
+<% for(var i=newsList.length-1; i >=newsList.length-30 && i>=0 ; i--) { %>
+    <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
+      <div class="container">  
+      <form action="article/<%=newsList[i].id%>" method="get" id="<%=newsList[i].id%>" onclick="submitform(this.id)">
+      <div id="<%=newsList[i].id%>" class="row" >
+          
+          <div class="col-md-8">
+            <div class="card-body"  >
+              <h3 class="card-title"><b><%=newsList[i].newtitle%></b></h3>
+              <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px; text-align: justify; height: 80px; line-height: 20px; overflow: hidden;"><%=newsList[i].description%></p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 270px; max-height: 450px;"> 
+          </div>
+        </form>
+        </div>
+      </div>
+        <div class="row">
+          <td><button id="<%=newsList[i].id%>"class="fa fa-heart" onclick="myfun(this.id)" type="submit" style="margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Like</button>
+        </div>
+      </div>
+<%}%>
+<script>
+  function myfun(x){
+    alert("login to like")
+    window.open("/profileindex")
+  }
+</script>

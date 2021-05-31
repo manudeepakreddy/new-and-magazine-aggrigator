@@ -1,0 +1,80 @@
+<%- include('navbar.ejs') %>
+<nav class="navbar-default" role="navigation">
+  <div class="container">
+  <ul class="nav navbar-nav ">
+    <li><a href="/" class="menu " >Home</a></li>
+    <li><a href="/entertainment" class=" menu">Entertainment</a></li>
+    <li><a href="/politics" class="menu">Politics</a></li>
+    <li><a href="/sports" class="menu">Sports</a></li>
+    <li><a href="/buisness" class="menu">Buisness</a></li>
+    <li><a href="/health" class="menu">Health</a></li> 
+    <li><a href="/technology" class="menu">Technology</a></li> 
+  </ul>
+  </div>
+  </nav>
+  <% for(var i=0; i < news.length; i++) { %>
+    <div class="card" style="max-width: 90%; margin: 5px auto 4px auto;border-radius: 9px">
+      <div class="container">  
+      <div class="row">
+          
+            <div class="card-body"  >
+              <h3 class="card-title"><b><%=news[i].newtitle%></b></h3><br><br>
+              <div style="width: 100%; text-align: center;">
+            <img src="<%=news[i].image%>" alt="hello" class="img-fluid" style="width: 50%;height: 50%; max-width: 300px; max-height: 500px;">
+          </div>
+            <br><br><p class="card-text" style="padding-left: 2px; text-align: justify;white-space:pre-line;"><%=news[i].description%></p>
+          </div>
+          </div>
+      </div>
+      </div>
+<%}%>
+<script>
+  function myfun(x){
+    alert("login to like")
+    window.open("/profileindex")
+  }
+</script>
+<br>
+<hr style="margin-left: 50px;margin-right: 50px; height: 1px; background: gray;">
+<br>
+<script>
+  function submitform(id){
+    document.getElementById(id).submit()
+  }
+</script>
+<% for(var i=0; i < newsList.length; i++) { %>
+  <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
+    <div class="container">  
+    <form action="<%=newsList[i].id%>" method="get" id="<%=newsList[i].id%>" onclick="submitform(this.id)">
+    <div id="<%=newsList[i].id%>" class="row" >
+        
+        <div class="col-md-8">
+          <div class="card-body"  >
+            <h3 class="card-title"><b><%=newsList[i].newtitle%></b></h3>
+            <p class="card-text" class="col-sm-8 news-add" style="padding-left: 2px; text-align: justify; height: 80px; line-height: 20px; overflow: hidden;"><%=newsList[i].description%></p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <img src="<%=newsList[i].image%>" alt="hello" class="img-fluid" style="padding: 20px 20px 20px 20px; max-width: 270px; max-height: 450px;"> 
+        </div>
+      </form>
+      </div>
+    </div>
+      <div class="row">
+        <td><button id="<%=newsList[i].id%>"class="fa fa-heart" onclick="myfun(this.id)" type="submit" style="margin-left: 50px; margin-bottom: 10px; font-size: 16px;"> Like</button>
+      </div>
+    </div>
+<%}%>
+<script>
+function myfun(x){
+  alert("login to like")
+  window.open("/profileindex")
+}
+</script>
+</body>
+  <script src="js/jquery.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/smoothScroll.js"></script>
+  <script src="js/jquery.flexslider.js"></script>
+  <!-- <script src="ejs.min.js"></script> -->
+</html>

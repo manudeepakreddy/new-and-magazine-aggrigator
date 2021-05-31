@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <title>News</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/templatemo_style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+<body id="top" data-spy="scroll" data-target=".navbar-collapse">
+
+
+<style type="text/css">
+    .sticktop{
+      position: -webkit-sticky;
+      position: sticky;
+      display: block;
+      top: 0px;
+      z-index: 100;
+
+    }
+  </style>
+  <div class="sticktop">
+    <nav class="navbar-default" role="navigation">
+    <div class="container">
+      <div class="navbar-header navbar-left">
+        <a class="navbar-brand" href="/profileindex"><img class="img-fluid"src="images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
+        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon icon-bar"></span>
+          <span class="icon icon-bar"></span>
+          <span class="icon icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse">
+        
+        <ul class="nav navbar-nav ">
+          <li><a href="/profileindex" class="menu " style="background-color: orange">NEWS</a></li>
+          <li><a href="/pmagazine" class="active menu">Magazines</a></li>
+          <li><a href="#contact" class="menu">Contact</a></li>
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#profile">Profile
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li style="vertical-align:auto;"><a><p>Welcome, <%=user.firstname%> <%=user.lastname%></p></a></li>
+            <% if(user.isadmin){%>
+              <li><a>Insert NEWS and Magazines</a></li>
+            <%}%>
+            
+            <li><a href="/logout">logout</a></li>
+
+          </ul>
+        </li>
+            </ul>
+              <form class="navbar-form" action="/psearch" method="GET" style="padding-top: 7px;">
+                  <input type="text" name="searchelement" id="searchelement" class="form-control" placeholder="Search">
+                  <button class="btn" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+              </form>
+      </div>
+    </div>
+  </nav>
+</div>

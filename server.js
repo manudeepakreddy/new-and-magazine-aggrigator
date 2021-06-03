@@ -59,13 +59,13 @@ app.use(bodyParser.json({
 			regex=""
 			regex=Searchelement.join("|");
 			News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, exnews){
-				res.render('index',{
+				res.render('searchresult',{
 					newsList:exnews
 				})
 			})
 		}
 		else{
-			res.render('index', {
+			res.render('searchresult', {
 				newsList:news
 			})
 		}
@@ -255,14 +255,16 @@ app.get("/psearch", isLoggedIn,async(req, res) => {
 			regex=""
 			regex=Searchelement.join("|");
 			News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, exnews){
-				res.render('profileindex',{
-					newsList:exnews
+				res.render('psearchresult',{
+					newsList:exnews,
+					user:req.user
 				})
 			})
 		}
 		else{
-			res.render('profileindex', {
-				newsList:news
+			res.render('psearchresult', {
+				newsList:news,
+				user:req.user
 			})
 		}
 	})
@@ -464,6 +466,33 @@ app.get('/pmagazineview/:id',isLoggedIn,(req,res) => {
 		}
 
 	})
+})
+app.get('/insertnews', isLoggedIn, (req,res) => {
+	if(req.user.isadmin){
+		res.render("insertnews")
+	}else{
+		// res.render("profileindex")
+		// res.send("restricted")
+		res.redirect("/profileindex")
+	}
+})
+app.get('/insertmagazines', isLoggedIn, (req,res) => {
+	if(req.user.isadmin){
+		res.render("insertmagazines")
+	}else{
+		// res.render("profileindex")
+		// res.send("restricted")
+		res.redirect("/profileindex")
+	}
+})
+app.get('/admindashboard', isLoggedIn, (req,res) => {
+	if(req.user.isadmin){
+		res.render("admindashboard")
+	}else{
+		// res.render("profileindex")
+		// res.send("restricted")
+		res.redirect("/profileindex")
+	}
 })
 //Auth Routes
 app.get("/login",(req,res)=>{

@@ -7,9 +7,9 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <title>Magazines</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/templatemo_style.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/templatemo_style.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>   
         <!-- 
@@ -37,7 +37,7 @@
     <nav class="navbar-default" role="navigation">
     <div class="container">
       <div class="navbar-header navbar-left">
-        <a class="navbar-brand" href="/magazine"><img class="img-fluid"src="images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
+        <a class="navbar-brand" href="/magazine"><img class="img-fluid"src="../images/logo1.png" alt="" width="250" height="50" class="d-inline-block align-text-top"></a>
         <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <span class="icon icon-bar"></span>
           <span class="icon icon-bar"></span>
@@ -58,8 +58,29 @@
     </div>
   </nav>
 </div>
-
-  <div class="container">
+<div class="container">
+  <div class="row">
+      <br><br>
+    <% for(var i=magsList.length-1; i >=0 ; i--) { %>
+      <div class="col-md-6 how-img" style="margin: auto; text-align: center;">                        
+          <img class=" img-thumbnail" src="<%=magsList[i].image%>" width="300" />
+      </div>
+      
+      <div class="col-md-6">
+        <div class="card w-75">
+          <div class="card-body">
+          <h3 class="card-title"style=""><b></b><%=magsList[i].title%> - <%=magsList[i].issued %></h3>
+          <p class="card-text" style="white-space:pre-line; text-align: justify "><b>Description:</b><%= magsList[i].description %> </p>
+          <div style="margin: auto; text-align: center;">
+          <a href="<%=magsList[i].pdf%>" download="<%=magsList[i].title%>"><button class="btn btn-primary btn-lg"><span class="fa fa-download"></span> Download</button></a> </p>
+          </div>
+        </div>
+      </div>
+    </div>
+      <%}%>
+      </div>
+</div>
+  <!-- <div class="container">
     <div class="row">
         <br><br>
       <% for(var i=magsList.length-1; i >=0 ; i--) { %>
@@ -68,14 +89,14 @@
         </div>
         <br>
         <div style="padding-left: 20px; ">
-            <h2 style="padding-left: 5px; text-align: justify;"><b>Title:</b><%=magsList[i].title%></h2>
-            <p class="col-sm-8 news-add"style="padding-left: 5px;white-space:pre-line;"><b>Description:</b><%= magsList[i].description %> </p>
+            <h2 style="padding-left: 5px; text-align: justify;"><b>Title:</b><%=magsList[i].title%> - <%=magsList[i].issued%></h2>
+            <p class="col-sm-8 news-add"style="padding-left: 5px;white-space:pre-line; text-align: justify "><b>Description:</b><%= magsList[i].description %> </p>
             <a href="<%=magsList[i].pdf%>" download="<%=magsList[i].title%>"><button><span class="fa fa-download"></span> Download</button></a> </p>
         </div>
         <%}%>
         </div>
-    </div>
-<br><hr style="margin-left: 50px;margin-right: 50px; height: 1px; background: gray;"><br>
+    </div> -->
+<br><hr style="margin-left: 5px;margin-right: 5px; height: 1px; background: gray;"><br>
 <script>
   function submitform(id){
     document.getElementById(id).submit();
@@ -101,10 +122,10 @@
   
 
 </body>
-  <script src="js/jquery.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/smoothScroll.js"></script>
-  <script src="js/jquery.flexslider.js"></script>
+  <script src="../js/jquery.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/smoothScroll.js"></script>
+  <script src="../js/jquery.flexslider.js"></script>
   <!-- <script src="ejs.min.js"></script> -->
 
 </html>

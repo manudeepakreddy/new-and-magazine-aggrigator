@@ -43,14 +43,16 @@
           <li><a href="/profileindex" class="menu " style="background-color: orange">NEWS</a></li>
           <li><a href="/pmagazine" class="active menu">Magazines</a></li>
           <li><a href="#contact" class="menu">Contact</a></li>
+
+          <% if(user.isadmin){%>
+            <li><a href="/admindashboard">Dashboard</a></li>
+          <%}%>
+          
         <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#profile">Profile
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li style="vertical-align:auto;"><a><p>Welcome, <%=user.firstname%> <%=user.lastname%></p></a></li>
-            <% if(user.isadmin){%>
-              <li><a>Insert NEWS and Magazines</a></li>
-            <%}%>
             
             <li><a href="/logout">logout</a></li>
 

@@ -469,7 +469,9 @@ app.get('/pmagazineview/:id',isLoggedIn,(req,res) => {
 })
 app.get('/insertnews', isLoggedIn, (req,res) => {
 	if(req.user.isadmin){
-		res.render("insertnews")
+		res.render("insertnews",{
+			user:req.user
+		})
 	}else{
 		// res.render("profileindex")
 		// res.send("restricted")
@@ -478,7 +480,9 @@ app.get('/insertnews', isLoggedIn, (req,res) => {
 })
 app.get('/insertmagazines', isLoggedIn, (req,res) => {
 	if(req.user.isadmin){
-		res.render("insertmagazines")
+		res.render("insertmagazines",{
+			user:req.user
+		})
 	}else{
 		// res.render("profileindex")
 		// res.send("restricted")
@@ -487,7 +491,9 @@ app.get('/insertmagazines', isLoggedIn, (req,res) => {
 })
 app.get('/admindashboard', isLoggedIn, (req,res) => {
 	if(req.user.isadmin){
-		res.render("admindashboard")
+		res.render("admindashboard",{
+			user:req.user
+		})
 	}else{
 		// res.render("profileindex")
 		// res.send("restricted")

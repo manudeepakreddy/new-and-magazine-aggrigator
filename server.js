@@ -52,7 +52,7 @@ app.use(bodyParser.json({
 	var Searchelement=req.query.searchelement.split(" ");
 	regex = ""
 	for(var i=0;i<Searchelement.length;i++){
-		regex+="(?=.*"+Searchelement[i]+")"
+		regex+="(?=.*"+" "+Searchelement[i]+" "+")"
 	}
 	News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, news){
 		if(news.length<1){
@@ -248,7 +248,7 @@ app.get("/psearch", isLoggedIn,async(req, res) => {
 	var Searchelement=req.query.searchelement.split(" ");
 	regex = ""
 	for(var i=0;i<Searchelement.length;i++){
-		regex+="(?=.*"+Searchelement[i]+")"
+		regex+="(?=.*"+" "+Searchelement[i]+" "+")"
 	}
 	News.find({$or:[{newtitle:{"$regex":regex, "$options":"i"}},{description:{"$regex":regex, "$options":"i"}}]}, function(err, news){
 		if(news.length<1){

@@ -4,7 +4,7 @@
     }
   </script>
   <% for(var i=newsList.length-1; i >=newsList.length-30 && i>=0 ; i--) { %>
-    <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1);max-width: 75%; margin: 5px auto 4px auto;border-radius: 9px">
+    <div class="card" style="box-shadow:  2px 4px 8px 0 rgba(0.1,0,0,0.1); max-width: 95%; margin: 5px auto 4px auto;border-radius: 9px">
       <div class="container">  
         <form action="particle/<%=newsList[i].id%>" method="get" id="particle/<%=newsList[i].id%>" onclick="submitform(this.id)">
       <div class="row">
@@ -25,7 +25,7 @@
         </form>
       </div>
       
-        <div class="row">
+        <div class="row card-body">
             <% if(newsList[i].likes.includes(user.id)){%>
               
               <!-- <form action="/unlike/<%=newsList[i].id%>" method="POST"> -->
@@ -58,7 +58,7 @@
                     var cr=document.getElementById(id);
                     cr.setAttribute("onclick", "javascript: unlikepost(id)")
                     cr.setAttribute("style","color: red; margin-left: 50px; margin-bottom: 10px; font-size: 16px;")
-                    cr.innerHTML="Liked"
+                    cr.innerHTML=" Liked"
                     // cr.disabled=true
                   })
               }
@@ -77,7 +77,7 @@
                     var cr=document.getElementById(id);
                     cr.setAttribute("onclick", "javascript: likepost(id)")
                     cr.setAttribute("style", "margin-left: 50px; margin-bottom: 10px; font-size: 16px;")
-                    cr.innerHTML="Like"
+                    cr.innerHTML=" Like"
                 })
               }
 </script>

@@ -29,13 +29,7 @@ var ejs=require('ejs')
 const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants')
 const { ObjectID } = require('bson')
 app.set('view engine','ejs')
-app.get('/', (req, res) => {
-	News.find({}, function(err, news){
-		res.render('index', {
-			newsList:news
-		})
-	})
-})
+
 app.set('views',__dirname+'/views')
 app.use(express.static(__dirname + '/static'));
 app.use(bodyParser.json({
@@ -48,6 +42,32 @@ app.use(bodyParser.json({
 	extended: true 
   }));
   
+  
+app.use(require("express-session")({
+    secret:"askfj;dlkjsldkjfa;kjdsf;lkjsd;flkjsdlkfj;lkjsdf;ljlkjsdf",       //decode or encode session
+    resave: false,          
+    saveUninitialized:false    
+}));
+app.use(flash());
+passport.serializeUser(User.serializeUser());       //session encoding
+passport.deserializeUser(User.deserializeUser());   //session decoding
+passport.use(new LocalStrategy(User.authenticate()));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/', (req, res) => {
+	if(req.user){
+		res.redirect("/profileindex")
+	}
+	else{
+		News.find({}, function(err, news){
+			res.render('index', {
+				newsList:news
+			})
+		})
+	}
+	
+})
   app.get("/search", async(req, res) => {
 	var Searchelement=req.query.searchelement.split(" ");
 	regex = ""
@@ -73,53 +93,88 @@ app.use(bodyParser.json({
 })
 
 app.get('/magazine', async(req , res)=> {
-	Mags.find({}, function(err, mags){
-		res.render('magazine',{
-			magsList:mags
+	if(req.user){
+		res.redirect("pmagazine")
+	}
+	else{
+		Mags.find({}, function(err, mags){
+			res.render('magazine',{
+				magsList:mags
+			})
 		})
-	})
+	}
 })
 app.get('/sports', async(req , res)=> {
-	News.find({type_of_news: "Sports"}, function(err, news){
-		res.render('sports',{
-			newsList:news
+	if(req.user){
+		res.redirect("psports")
+	}
+	else{
+		News.find({type_of_news: "Sports"}, function(err, news){
+			res.render('sports',{
+				newsList:news
+			})
 		})
-	})
+	}
 })
 app.get('/politics', async(req , res)=> {
-	News.find({type_of_news: "Politics"}, function(err, news){
-		res.render('politics',{
-			newsList:news
+	if(req.user){
+		res.redirect("ppolitics")
+	}
+	else{
+		News.find({type_of_news: "Politics"}, function(err, news){
+			res.render('politics',{
+				newsList:news
+			})
 		})
-	})
+	}
 })
 app.get('/entertainment',async(req , res)=> {
-	News.find({type_of_news: "Entertainment"}, function(err, news){
-		res.render('entertainment',{
-			newsList:news
+	if(req.user){
+		res.redirect("pentertainment")
+	}
+	else{
+		News.find({type_of_news: "Entertainment"}, function(err, news){
+			res.render('entertainment',{
+				newsList:news
+			})
 		})
-	})
+	}
 })
 app.get('/buisness', async(req , res)=> {
-	News.find({type_of_news: "Buisness"}, function(err, news){
-		res.render('buisness',{
-			newsList:news
+	if(req.user){
+		res.redirect("pbuisness")
+	}
+	else{
+		News.find({type_of_news: "Buisness"}, function(err, news){
+			res.render('buisness',{
+				newsList:news
+			})
 		})
-	})
+	}
 })
 app.get('/health', async(req , res)=> {
-	News.find({type_of_news: "Health"}, function(err, news){
-		res.render('health',{
-			newsList:news
+	if(req.user){
+		res.redirect("phealth")
+	}
+	else{
+		News.find({type_of_news: "Health"}, function(err, news){
+			res.render('health',{
+				newsList:news
+			})
 		})
-	})
+	}
 })
 app.get('/technology', (req , res)=> {
-	News.find({type_of_news: "Technology"}, function(err, news){
-		res.render('technology',{
-			newsList:news
+	if(req.user){
+		res.redirect("ptechnology")
+	}
+	else{
+		News.find({type_of_news: "Technology"}, function(err, news){
+			res.render('technology',{
+				newsList:news
+			})
 		})
-	})
+	}
 })
 
 app.get('/article/:id',async(req,res)=>{
@@ -160,7 +215,7 @@ app.get('/article/:id',async(req,res)=>{
 			const axios = require('axios')
 
 			axios
-			.post('http://192.168.43.233:5000//similarity', {description: news[0].description})
+			.post('http://127.0.0.1:5000//similarity', {description: news[0].description})
 			.then(mlresult => {
 				// console.log(`statusCode: ${res.statusCode}`)
 				var indices = mlresult.data["indices"]
@@ -205,7 +260,7 @@ app.get('/magazineview/:id',(req,res) => {
 			const axios = require('axios')
 
 			axios
-			.post('http://192.168.43.233:5000//magsimilarity', {description: mags[0].description})
+			.post('http://127.0.0.1//magsimilarity', {description: mags[0].description})
 			.then(mlresult => {
 				// console.log(`statusCode: ${res.statusCode}`)
 				var indices = mlresult.data["indices"]
@@ -233,17 +288,6 @@ app.get('/magazineview/:id',(req,res) => {
 		// })
 	})
 })
-app.use(require("express-session")({
-    secret:"askfj;dlkjsldkjfa;kjdsf;lkjsd;flkjsdlkfj;lkjsdf;ljlkjsdf",       //decode or encode session
-    resave: false,          
-    saveUninitialized:false    
-}));
-app.use(flash());
-passport.serializeUser(User.serializeUser());       //session encoding
-passport.deserializeUser(User.deserializeUser());   //session decoding
-passport.use(new LocalStrategy(User.authenticate()));
-app.use(passport.initialize());
-app.use(passport.session());
 app.get("/psearch", isLoggedIn,async(req, res) => {
 	var Searchelement=req.query.searchelement.split(" ");
 	regex = ""
@@ -341,6 +385,7 @@ app.get('/pentertainment',isLoggedIn, async(req , res)=> {
 		})
 	})
 })
+
 app.put("/like", isLoggedIn,async(req,res)=>{
 	const cid= req.body.postid;
 	News.findByIdAndUpdate(cid,{
@@ -502,9 +547,15 @@ app.get('/admindashboard', isLoggedIn, (req,res) => {
 })
 //Auth Routes
 app.get("/login",(req,res)=>{
+	if(req.user){
+		// console.log("hi")
+		res.redirect("/profileindex")
+	}else{
+		
 	var message=req.flash('error')
 	// console.log(message)
     res.render("login",{message});
+	}
 });
 app.post("/login",passport.authenticate("local",{failureRedirect:"/login",failureFlash : true}),function (req, res){
 	var redirectTo='/profileindex'

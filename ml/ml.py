@@ -68,10 +68,10 @@ def convert_w2v(data, string):
 def similarity(data, string, top):
     sim = cosine_similarity(string, data)
     sort_sim = np.argsort(sim)[::-1]
+    sim_score = np.sort(np.squeeze(sim))[::-1][1:top+1]
     sort_sim = np.squeeze(sort_sim).tolist()
     top_sim = sort_sim[:top]
-
-    return top_sim
+    return top_sim ,sim_score
 
 
 def main(csv_data_path, query, top_result):
@@ -91,11 +91,11 @@ def main(csv_data_path, query, top_result):
     data, index = load_csv(csv_data_path)
     # import pdb;pdb.set_trace()
     data_vec, query_vec = convert_w2v(data, [query])
-    top_result_indices = similarity(data_vec, query_vec, top_result)
+    top_result_indices, similarity_score = similarity(data_vec, query_vec, top_result)
     # print(f'qury string:: {query}')
     for res in top_result_indices:
         # print(f'similarity:: {data[res]}')
         index_list.append(index[res])
-    return index_list
+    return index_list , similarity_score
 
 

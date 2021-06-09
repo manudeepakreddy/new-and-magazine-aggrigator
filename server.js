@@ -260,7 +260,7 @@ app.get('/magazineview/:id',(req,res) => {
 			const axios = require('axios')
 
 			axios
-			.post('http://127.0.0.1//magsimilarity', {description: mags[0].description})
+			.post('http://127.0.0.1:5000//magsimilarity', {description: mags[0].description})
 			.then(mlresult => {
 				// console.log(`statusCode: ${res.statusCode}`)
 				var indices = mlresult.data["indices"]

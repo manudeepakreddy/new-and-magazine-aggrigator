@@ -16,9 +16,13 @@ def similarity():
 		data=request.get_json()
 		csv_path = './data.csv'
 		description = data["description"]
-		indices = main(csv_path, description, 15)
+		indices, score = main(csv_path, description, 15)
 		resp = {"indices": indices}
-		print(indices)
+		print("Top similar News are:")
+		for i in range(15):
+			print("The News id -",indices[i],"having similarity score",round(score[i],3))
+		# print(indices)
+		# print(score)
 		response = app.response_class(
         response=json.dumps(resp),
         status=200,
@@ -33,9 +37,13 @@ def magsimilarity():
 		data=request.get_json()
 		csv_path = './magdata.csv'
 		description = data["description"]
-		indices = main(csv_path, description, 8)
+		indices , score = main(csv_path, description, 8)
 		resp = {"indices": indices}
-		print(indices)
+		print("Top similar Magazines are:")
+		for i in range(8):
+			print("The Magazine id -",indices[i],"having similarity score",round(score[i],3))
+		# print(indices)
+		# print(score)
 		response = app.response_class(
         response=json.dumps(resp),
         status=200,
